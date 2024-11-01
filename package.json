@@ -1,0 +1,16 @@
+{
+  "name": "hackatime-scripts",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@types/pg": "^8.11.10",
+    "bottleneck": "^2.19.5",
+    "pg": "^8.13.1"
+  }
+}
