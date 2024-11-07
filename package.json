@@ -9,6 +9,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@clack/prompts": "^0.7.0",
     "@types/pg": "^8.11.10",
     "bottleneck": "^2.19.5",
     "pg": "^8.13.1"
