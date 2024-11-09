@@ -1,19 +1,25 @@
 name: Merge Prov Users
 on:
-  workflow_dispatch
+  workflow_dispatch:
   schedule:
     - cron: "0 */1 * * *"
+
 jobs:
   merge:
-    name: merge
+    name: Merge
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
     runs-on: ubuntu-latest
     steps:
-      # ...
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      # run any `bun` or `bunx` command
-      - run: bun install
-      - run: bun run remove-prov-acounts.ts
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Remove provisional accounts
+        run: bun run remove-prov-accounts.ts
+
