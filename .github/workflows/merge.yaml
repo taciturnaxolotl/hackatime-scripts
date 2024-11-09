@@ -1,5 +1,6 @@
 name: Merge Prov Users
 on:
+  workflow_dispatch
   schedule:
     - cron: "0 */1 * * *"
 jobs:
