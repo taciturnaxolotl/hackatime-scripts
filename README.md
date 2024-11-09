@@ -1,4 +1,4 @@
-# hackatime-scripts
+# hackatime-scripts [![Merge Prov Users](https://github.com/kcoderhtml/hackatime-scripts/actions/workflows/merge.yaml/badge.svg)](https://github.com/kcoderhtml/hackatime-scripts/actions/workflows/merge.yaml)
 
 A collection of scripts to help with common hackatime problems
 
