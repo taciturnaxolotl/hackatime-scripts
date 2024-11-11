@@ -92,18 +92,15 @@ try {
 				problemIDs.push(user);
 			}
 
-			const longestNameLength = names.reduce(
-				(max, name) => Math.max(max, name.name.length),
-				0,
-			);
-
 			const name =
 				(res.profile?.display_name_normalized?.length ?? 0) > 0
 					? res.profile?.display_name_normalized
 					: res.profile?.real_name_normalized;
 
+			process.stdout.clearLine(0);
+			process.stdout.cursorTo(0);
 			process.stdout.write(
-				`\r${i}/${usersToPopulate.length} at ${Math.round((50 / 60) * 10) / 10} per sec; finished in ${Math.round((usersToPopulate.length - i) * (50 / 60))}s; name=${name?.padEnd(Math.max(0, longestNameLength - name?.length + 5), " ")}`,
+				`${i}/${usersToPopulate.length} at ${Math.round((50 / 60) * 10) / 10} per sec; finished in ${Math.round((usersToPopulate.length - i) * (50 / 60))}s; name=${name}`,
 			);
 
 			if (res.ok) {
