@@ -58,6 +58,12 @@ try {
 		(id) => !id.startsWith("$high-seas-provisional-"),
 	);
 
+	const problemIDs = usersToPopulate.filter(
+		(id) => !id.match(/^U[0-9A-Z]{10}$/),
+	);
+
+	usersToPopulate = usersToPopulate.filter((id) => id.match(/^U[0-9A-Z]{10}$/));
+
 	console.log(
 		usersToPopulate.length,
 		"users have empty names and are not provisional accounts",
@@ -70,8 +76,6 @@ try {
 	});
 
 	const names: { id: string; name: string }[] = [];
-
-	const problemIDs: string[] = [];
 
 	let i = 0;
 	for (const user of usersToPopulate) {
