@@ -51,7 +51,17 @@ try {
 	);
 	usersToPopulate = res.rows.map((row) => row.id);
 
-	console.log(usersToPopulate.length, "users have empty names", "\n\n");
+	console.log(usersToPopulate.length, "users have empty names");
+
+	// filter to not include users with id starting with $high-seas-provisional-
+	usersToPopulate = usersToPopulate.filter(
+		(id) => !id.startsWith("$high-seas-provisional-"),
+	);
+
+	console.log(
+		usersToPopulate.length,
+		"users have empty names and are not provisional accounts",
+	);
 
 	// Create a rate limiter with a maximum of 10 requests per second
 	const limiter = new Bottleneck({
@@ -93,7 +103,7 @@ try {
 					: res.profile?.real_name_normalized;
 
 			process.stdout.write(
-				`\r${i}/${usersToPopulate.length} at ${Math.round((50 / 60) * 10) / 10} per sec; finished in ${Math.round((usersToPopulate.length - i) / (50 / 60))}s; name=${name?.padEnd(Math.max(0, longestNameLength - name?.length + 3), " ")}`,
+				`\r${i}/${usersToPopulate.length} at ${Math.round((50 / 60) * 10) / 10} per sec; finished in ${Math.round((usersToPopulate.length - i) * (50 / 60))}s; name=${name?.padEnd(Math.max(0, longestNameLength - name?.length + 5), " ")}`,
 			);
 
 			if (res.ok) {
@@ -106,19 +116,21 @@ try {
 		});
 	}
 
-	console.log("Successfully got the names of", names.length, "users");
+	console.log("\nSuccessfully got the names of", names.length, "users");
 
-	// insert back into the db
-	let queryString = "";
-	for (const name of names) {
-		queryString += `
-      UPDATE users
-      SET name = '${name.name}'
-      WHERE id = '${name.id}';
-    `;
-	}
+	const queryText = `
+    UPDATE users
+    SET name = $1
+    WHERE id = $2;`;
 
-	await prodClient.query(queryString.trim());
+	const updatePromises = names.map((name) =>
+		prodClient.query(queryText, [name.name, name.id]),
+	);
+
+	await Promise.all(updatePromises);
+
+	console.log("Successfully updated the names of", names.length, "users");
+
 	console.log("problemIDs:", problemIDs);
 } catch (error) {
 	console.error("Error fetching user by email:", error);
