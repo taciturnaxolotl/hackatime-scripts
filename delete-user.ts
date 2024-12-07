@@ -39,6 +39,12 @@ try {
 		.query("SELECT * FROM users WHERE id = $1;", [userId])
 		.then((res) => res.rows);
 
+	if (users.length === 0) {
+		log.error("User not found");
+		outro("Bye! 👋");
+		process.exit(1);
+	}
+
 	const heartbeatCount = await client
 		.query("SELECT COUNT(*) FROM heartbeats WHERE user_id = $1;", [userId])
 		.then((res) => res.rows[0].count);
@@ -136,11 +142,33 @@ try {
 
 	spin.message("Deleting user heartbeats");
 
-	await client
-		.query("DELETE FROM heartbeats WHERE user_id = $1;", [userId])
-		.then((res) => res.rows);
+	const deleteHeartbeatsInChunks = async (
+		userId: string,
+		chunkSize: number,
+	) => {
+		let deletedCount = 0;
 
-	spin.message("Deleted user heartbeats");
+		while (true) {
+			const result = await client.query(
+				"DELETE FROM heartbeats WHERE user_id = $1 LIMIT $2 RETURNING *;",
+				[userId, chunkSize],
+			);
+
+			const rowsDeleted = result.rowCount ?? 0;
+			deletedCount += rowsDeleted;
+
+			if (rowsDeleted < chunkSize) {
+				break;
+			}
+		}
+
+		return deletedCount;
+	};
+
+	const chunkSize = 1000; // Adjust the chunk size as needed
+	const totalDeleted = await deleteHeartbeatsInChunks(userId, chunkSize);
+
+	spin.message(`Deleted ${totalDeleted} user heartbeats`);
 
 	await Bun.sleep(1000);
 
