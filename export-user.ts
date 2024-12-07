@@ -12,10 +12,11 @@ log.info(
 
 // check if -u or --user flag with a user id is passed
 const args = process.argv.slice(2);
-let userId = args
-	.find((arg) => arg.match(/^--user=U[0-9A-Z]{10}$/) !== null)
-	?.split("=")[1]
-	.trim();
+let userId = args[0] === "-u" || args[0] === "--user" ? args[1] : undefined;
+
+if (userId) {
+	userId = userId.trim();
+}
 
 // if not then ask for one
 if (!userId) {
