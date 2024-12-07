@@ -93,7 +93,7 @@ try {
 		const afterSize = Bun.file("out/user.tgz").size;
 
 		log.success(
-			`Compressed files to user.tgz with a total size of ${humanize.fileSize(afterSize)} and a overall compression ratio of ${Math.round((beforeSize / afterSize) * 10) / 10}%`,
+			`Compressed files to user.tgz with a total size of ${humanize.fileSize(afterSize)} and a overall compression ratio of ${Math.round((beforeSize / afterSize) * 1000) / 10}%`,
 		);
 	} else {
 		log.warn("Not compressing files");
