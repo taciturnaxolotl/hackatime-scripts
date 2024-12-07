@@ -74,36 +74,75 @@ try {
 
 	const spin = spinner();
 
-	spin.start("Deleting user");
-
-	// fetch heartbeats
-	await client
-		.query("DELETE FROM aliases WHERE user_id = $1;", [userId])
-		.then((res) => res.rows);
+	spin.start("Deleting user record");
 
 	await client
-		.query("DELETE FROM heartbeats WHERE user_id = $1;", [userId])
+		.query("DELETE FROM users WHERE id = $1;", [userId])
 		.then((res) => res.rows);
 
-	await client
-		.query("DELETE FROM summaries WHERE user_id = $1;", [userId])
-		.then((res) => res.rows);
+	spin.message("Deleted user record");
 
-	await client
-		.query("DELETE FROM language_mappings WHERE user_id = $1;", [userId])
-		.then((res) => res.rows);
+	await Bun.sleep(1000);
 
-	await client
-		.query("DELETE FROM project_labels WHERE user_id = $1;", [userId])
-		.then((res) => res.rows);
+	spin.message("Deleting user from leaderboard");
 
 	await client
 		.query("DELETE FROM leaderboard_items WHERE user_id = $1;", [userId])
 		.then((res) => res.rows);
 
+	spin.message("Deleted user from leaderboard");
+
+	await Bun.sleep(1000);
+
+	spin.message("Deleting user aliases");
+
 	await client
-		.query("DELETE FROM users WHERE id = $1;", [userId])
+		.query("DELETE FROM aliases WHERE user_id = $1;", [userId])
 		.then((res) => res.rows);
+
+	spin.message("Deleted user aliases");
+
+	await Bun.sleep(1000);
+
+	spin.message("Deleting user summaries");
+
+	await client
+		.query("DELETE FROM summaries WHERE user_id = $1;", [userId])
+		.then((res) => res.rows);
+
+	spin.message("Deleted user summaries");
+
+	await Bun.sleep(1000);
+
+	spin.message("Deleting user language mappings");
+
+	await client
+		.query("DELETE FROM language_mappings WHERE user_id = $1;", [userId])
+		.then((res) => res.rows);
+
+	spin.message("Deleted user language mappings");
+
+	await Bun.sleep(1000);
+
+	spin.message("Deleting user project labels");
+
+	await client
+		.query("DELETE FROM project_labels WHERE user_id = $1;", [userId])
+		.then((res) => res.rows);
+
+	spin.message("Deleted user project labels");
+
+	await Bun.sleep(1000);
+
+	spin.message("Deleting user heartbeats");
+
+	await client
+		.query("DELETE FROM heartbeats WHERE user_id = $1;", [userId])
+		.then((res) => res.rows);
+
+	spin.message("Deleted user heartbeats");
+
+	await Bun.sleep(1000);
 
 	spin.stop("Data Deleted");
 
