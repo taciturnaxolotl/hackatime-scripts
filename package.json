@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
+    "@types/humanize-plus": "^1.8.2",
     "@types/pg": "^8.11.10",
     "bottleneck": "^2.19.5",
+    "humanize-plus": "^1.8.2",
     "pg": "^8.13.1"
   }
 }

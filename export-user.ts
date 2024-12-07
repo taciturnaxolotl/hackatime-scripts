@@ -1,6 +1,7 @@
 import { Client } from "pg";
 import type { User } from "./types";
 import { intro, log, text, confirm, spinner, outro } from "@clack/prompts";
+import humanize from "humanize-plus";
 
 const client = new Client(process.env.DATABASE_URL);
 
@@ -76,16 +77,22 @@ try {
 
 	await Bun.write("out/heartbeats.csv", csv);
 
+	const beforeSize =
+		Bun.file("out/user.json").size + Bun.file("out/heartbeats.csv").size;
+
 	log.success(
-		`Exported user ${user.id} to user.json and heartbeats.csv at a total size of ${Bun.file("out/user.json").size + Bun.file("out/heartbeats.csv").size} bytes and a total of ${heartbeats.length} heartbeats.`,
+		`Exported user ${user.id} to user.json and heartbeats.csv at a total size of ${humanize.fileSize(beforeSize)} and a total of ${humanize.compactInteger(heartbeats.length)} heartbeats.`,
 	);
 
 	const compress = await confirm({ message: "Compress files?" });
 
 	if (compress) {
 		await Bun.$`tar -czf out/user.tgz out/user.json out/heartbeats.csv`;
+
+		const afterSize = Bun.file("out/user.tgz").size;
+
 		log.success(
-			`Compressed files to user.tgz with a total size of ${Bun.file("out/user.tgz").size} bytes and a overall compression ratio of ${(Bun.file("out/user.json").size + Bun.file("out/heartbeats.csv").size) / Bun.file("out/user.tgz").size}`,
+			`Compressed files to user.tgz with a total size of ${humanize.fileSize(afterSize)} and a overall compression ratio of ${Math.round((beforeSize / afterSize) * 10) / 10}%`,
 		);
 	} else {
 		log.warn("Not compressing files");
