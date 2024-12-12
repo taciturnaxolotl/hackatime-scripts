@@ -9,6 +9,7 @@ jobs:
     name: Name
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       NODE_TLS_REJECT_UNAUTHORIZED: 0
     runs-on: ubuntu-latest
     steps:
