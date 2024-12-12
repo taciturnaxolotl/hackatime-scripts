@@ -1,4 +1,4 @@
-name: Add names to unnamed
+name: Populate Names
 on:
   workflow_dispatch:
   schedule:
