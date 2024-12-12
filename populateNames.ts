@@ -47,19 +47,19 @@ let usersToPopulate: string[] = [];
 
 // Helper function for console output
 const updateProgress = (i: number, total: number, name: string) => {
-    if (typeof process.stdout.clearLine === 'function' && 
-        typeof process.stdout.cursorTo === 'function') {
-        process.stdout.clearLine(0);
-        process.stdout.cursorTo(0);
-        process.stdout.write(
-            `${i}/${total} at ${Math.round((50 / 60) * 10) / 10} per sec; finished in ${Math.round((total - i) * (50 / 60))}s; name=${name}`
-        );
-    } else {
-        // Fallback to regular console.log for environments without these functions
-        console.log(
-            `Progress: ${i}/${total}, Current name: ${name}`
-        );
-    }
+	if (
+		typeof process.stdout.clearLine === "function" &&
+		typeof process.stdout.cursorTo === "function"
+	) {
+		process.stdout.clearLine(0);
+		process.stdout.cursorTo(0);
+		process.stdout.write(
+			`${i}/${total} at ${Math.round((50 / 60) * 10) / 10} per sec; finished in ${Math.round((total - i) * (50 / 60))}s; name=${name}`,
+		);
+	} else {
+		// Fallback to regular console.log for environments without these functions
+		console.log(`Progress: ${i}/${total}, Current name: ${name}`);
+	}
 };
 
 try {
@@ -118,7 +118,7 @@ try {
 					? res.profile?.display_name_normalized
 					: res.profile?.real_name_normalized;
 
-			updateProgress(i, usersToPopulate.length, name??'');
+			updateProgress(i, usersToPopulate.length, name ?? "");
 
 			if (res.ok) {
 				names.push({
