@@ -58,7 +58,7 @@ const updateProgress = (i: number, total: number, name: string) => {
 		);
 	} else {
 		// Fallback to regular console.log for environments without these functions
-		console.log(`Progress: ${i}/${total}, Current name: ${name}`);
+		console.log(`${i}/${total} at ${Math.round((50 / 60) * 10) / 10} per sec; finished in ${Math.round((total - i) * (50 / 60))}s; name=${name}`);
 	}
 };
 
