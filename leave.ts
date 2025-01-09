@@ -17,7 +17,7 @@ async function leaveConversation(token: string, channelId: string) {
 		});
 
 		if (!response.ok) {
-			console.error("Failed to leave conversation:", response.statusText);
+			console.error("Failed to leave conversation:", response.statusText);    
 		}
 
 		const json = await response.json();
