@@ -24,6 +24,4 @@ jobs:
       - name: Remove provisional acounts
         run: |
           export NODE_TLS_REJECT_UNAUTHORIZED=0
-          bun run populateNames.ts
-
-
+          bun run populateNames.ts -f
