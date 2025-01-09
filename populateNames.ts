@@ -59,21 +59,26 @@ await connectWithRetry();
 let usersToPopulate: string[] = [];
 
 // Helper function for console output
+const globalStartTime = Date.now();
 const updateProgress = (i: number, total: number, name: string) => {
+  const ratePerSecond = useCachet ? 200 : 50 / 60;
+  // Track start time globally rather than recreating each time
+  const elapsedSeconds = (Date.now() - globalStartTime) / 1000;
+  const averageRate = i / elapsedSeconds || ratePerSecond;
+  const remainingItems = total - i;
+  const estimatedSeconds = remainingItems / averageRate;
+
+  const message = `${i}/${total} at ${Math.round(averageRate * 10) / 10}/sec; ~${Math.round(estimatedSeconds)}s remaining; name=${name}`;
+
   if (
     typeof process.stdout.clearLine === "function" &&
     typeof process.stdout.cursorTo === "function"
   ) {
     process.stdout.clearLine(0);
     process.stdout.cursorTo(0);
-    process.stdout.write(
-      `${i}/${total} at ${useCachet ? "200" : Math.round((50 / 60) * 10) / 10} per sec; finished in ${Math.round((total - i) * (useCachet ? 1 / 200 : 50 / 60))}s; name=${name}`,
-    );
+    process.stdout.write(message);
   } else {
-    // Fallback to regular console.log for environments without these functions
-    console.log(
-      `${i}/${total} at ${useCachet ? "200" : Math.round((50 / 60) * 10) / 10} per sec; finished in ${Math.round((total - i) * (useCachet ? 1 / 200 : 50 / 60))}s; name=${name}`,
-    );
+    console.log(message);
   }
 };
 
